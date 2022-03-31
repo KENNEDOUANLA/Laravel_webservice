@@ -70,7 +70,7 @@ class UserController extends Controller
 							$user["uid"]=$id;
 							return response($user,201);
 						} catch (\Throwable $th) {
-							return response(["response"=>"Cet utilisateur existe deja ."],422);
+							return response(["response"=>"Cet utilisateur existe deja ."],401);
 						}
 					
 					} catch (\Throwable $th) {
@@ -94,7 +94,7 @@ class UserController extends Controller
 			if($token)
 				try {
 					$validatedData=$request->validate([
-						'nom'   => ['nullable','string','max:128'],
+						'nom'=> ['nullable','string','max:128'],
 						'login'=>['nullable','email:rfc,dns,filter,spoof,strict'],
 						'password'=>['nullable','string','max:100'],
 						'role'=>['nullable','string',Rule::in(['ROLE_ADMIN','ROLE_USER'])],
@@ -127,7 +127,6 @@ class UserController extends Controller
 									$user->status=$validatedData["status"]??$user->status;
 									if($password)
 										$user->password=Hash::make($password);
-
 									$user->save();
 								}elseif($role==null && $user->id==$user->id){
 									$user->login=$validatedData["login"]??$user->login;
@@ -143,7 +142,6 @@ class UserController extends Controller
 							}
 							return response(["response"=>"Aucun utilisateur trouvé avec l'UID donné"],404);
 						}
-
 					} catch (\Throwable $th) {
 						return response(["response"=>"Intener error","error"=>$th],500);
 					}
