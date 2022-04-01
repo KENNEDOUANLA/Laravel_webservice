@@ -13,7 +13,7 @@ use DateTimeZone;
 
 class TokenController extends Controller
 {
-    
+
     public function Valide(Request $requete ,$accessToken)
     {
         try {
@@ -22,23 +22,20 @@ class TokenController extends Controller
                 return response(["accessToken"=>$token->accessToken,"accessTokenExpiresAt"=>$token->accessTokenExpiresAt],200);
             else
                 return response(["response"=>"Token non trouvé / invalide"],404);
-            
+
         } catch (\Throwable $th) {
             return response([
                 "response"=>"probleme de seveur",
                 "erreur"=>$th
             ],500);
         }
-
-       
     }
 
 
     public function Create(Request $request)
-    {   
+    {
         $user_ip=$request->ip();
         $ip =Ip::haveAccess($user_ip);
-        //return $ip;
         if (gettype($ip)!="integer")
             try {
                 $validatedData=$request->validate([
@@ -60,7 +57,7 @@ class TokenController extends Controller
                 return response(["response"=>"donnees incomprehensible ou incomplete.","erreur"=>$th],422);
             }
 
-        return response(["response"=>"Plus de 3 échecs en 5 min,Ressayer 30 minutes apres."],429);
+        return response(["response"=>"Plus de 3 échecs en 5 min,Réessayer 30 minutes apres."],429);
     }
 
     public function Refresh(Request $requete ,$refreshToken)
@@ -70,7 +67,7 @@ class TokenController extends Controller
             $token=$token->user->createToken();
             return response($token,200);
         }
-        
+
         return response(["response"=>"refreshToken non trouvé / invalide"],404);
     }
 
@@ -84,7 +81,7 @@ class TokenController extends Controller
                 Ip::create(["Ip_address"=>$user_ip,
                 "nb_tentive"=>1,
                 "first_request_in_5_min"=>$date,
-                "last_request_in_5_min"=>$date                
+                "last_request_in_5_min"=>$date
                 ]);
             } catch (\Throwable $th) {
                 return response(["response"=>$th],404);

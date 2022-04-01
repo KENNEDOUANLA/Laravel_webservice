@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TokenController;
+use App\Http\Middleware\EnsureTokenIsValid;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -32,16 +33,13 @@ Route::prefix('account')->group(function () {
     });
 });
 
-Route::prefix('token')->group(function () {
+Route::controller(TokenController::class)->group(function () {
 
-    Route::controller(TokenController::class)->group(function () {
+    Route::get('/Valide/{accessToken}',"Valide");
 
-        Route::get('/{accessToken}',"Valide");
+    Route::post('/token',"Create");
 
-        Route::post('/',"Create");
-
-        Route::post('/{refreshToken}',"Refresh");
-        
-    });
-
+    Route::post('/refresh-token/{refreshToken}/token',"Refresh");
 });
+
+

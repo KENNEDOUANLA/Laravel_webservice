@@ -14,7 +14,6 @@ class UserController extends Controller
 
 	public function index(Request $request ,$id)
 	{
-	   
 		$user_token=$request->bearerToken();
 		if ($user_token) {
 			$token=Token::isValid($user_token);
@@ -36,10 +35,10 @@ class UserController extends Controller
 
 			}else
 			return response(["response"=>"Paramètres de connection invalide: admin token manquant et / ou incorrect et / ou token invalide"],422);
-		
+
 		}else
 			return response(["response"=>"Il est nécessaire d'être authentifié"],401);
-		
+
 	}
 
 	public function create(Request $request)
@@ -72,12 +71,12 @@ class UserController extends Controller
 						} catch (\Throwable $th) {
 							return response(["response"=>"Cet utilisateur existe deja ."],401);
 						}
-					
+
 					} catch (\Throwable $th) {
 						return response(["response"=>"donnees incomprehensible ou incomplete."],422);
 					}
 
-				}else 
+				}else
 					return response(["response"=>"Il est nécessaire de disposer d'un compte admin pour créer un compte."],403);
 			else
 				return response(["response"=>"Paramètres de connection invalide: admin token manquant et / ou incorrect et / ou token invalide"],422);
@@ -145,7 +144,7 @@ class UserController extends Controller
 					} catch (\Throwable $th) {
 						return response(["response"=>"Intener error","error"=>$th],500);
 					}
-				
+
 				} catch (\Throwable $th) {
 					return response(["response"=>"donnees incomprehensible ou incomplete."],422);
 				}
